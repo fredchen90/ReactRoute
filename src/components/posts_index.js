@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchPosts } from '../actions';
+import { fetchPosts, deletePost } from '../actions';
 
 class PostsIndex extends Component {
 	componentDidMount() {
@@ -14,6 +14,16 @@ class PostsIndex extends Component {
 			return (
 				<li className="list-group-item" key={post.id}>
 					<Link to={`/posts/${post.id}`}>{post.title}</Link>
+					<button
+						className="btn btn-danger pull-xs-right"
+						onClick={() => {
+							this.props.deletePost(post.id, () => {
+								this.props.history.push('/');
+							});					
+						}}
+					>
+						Delete Post
+					</button>
 				</li>
 			);
 		});
@@ -40,4 +50,4 @@ function mapStateToProps(state) {
 	return { posts: state.posts };
 }
 
-export default connect(mapStateToProps, { fetchPosts })(PostsIndex);
+export default connect(mapStateToProps, { fetchPosts, deletePost })(PostsIndex);
